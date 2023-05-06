@@ -25,35 +25,28 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
             {
                 throw new IndexOutOfRangeException();
             }
-            if (index == _size)
-            {
+            var currentNode = _head;
 
+            if (index < currentNode.Value.Length)
+            {
+                return currentNode.Value.Span[index];
             }
-            else
+
+            var i = currentNode.Value.Length;
+            currentNode = currentNode.Next;
+
+            while (currentNode is not null && i <= index)
             {
-                var currentNode = _head;
-
-                if (index < currentNode.Value.Length)
+                if (i == index && currentNode is not null)
                 {
-                    return currentNode.Value.Span[index];
+                    return currentNode.Value.Span[0];
                 }
 
-                var i = currentNode.Value.Length;
-                currentNode = currentNode.Next;
-
-                while (currentNode is not null && i <= index)
+                if (currentNode is not null)
                 {
-                    if (i == index && currentNode is not null)
-                    {
-                        return currentNode.Value.Span[0];
-                    }
-
-                    if (currentNode is not null)
-                    {
-                        currentNode = currentNode.Next;
-                    }
-                    i++;
+                    currentNode = currentNode.Next;
                 }
+                i++;
             }
 
             return default!;
