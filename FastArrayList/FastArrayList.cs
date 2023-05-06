@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Jovton;
 
@@ -130,6 +131,11 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
 
         Insert(_size, (T)value);
         return _size - 1;
+    }
+
+    public void AddRange(T[] items)
+    {
+        Insert(_size, items);
     }
 
     public void Clear()
@@ -271,6 +277,11 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
 
     public void Insert(int index, T item)
     {
+        Insert(index, new T[] { item });
+    }
+
+    public void Insert(int index, T[] items)
+    {
         if (index > _size)
         {
             throw new IndexOutOfRangeException();
@@ -278,7 +289,7 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
 
         if (index == _size)
         {
-            _tail!.Next = new FastArrayListNode<Memory<T>>(new[] { item });
+            _tail!.Next = new FastArrayListNode<Memory<T>>(items);
             _tail = _tail.Next;
         }
         else
@@ -294,7 +305,7 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
                 var n1v = existingNode.Value[..index];
                 var n2v = existingNode.Value[index..];
 
-                var newNode = new FastArrayListNode<Memory<T>>(new[] { item });
+                var newNode = new FastArrayListNode<Memory<T>>(items);
                 existingNode.Value = n1v;
                 existingNode.Next = newNode;
 
@@ -320,7 +331,7 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
                     _tail = newNode;
                 }
 
-                existingNode.Value = new Memory<T>(new[] { item });
+                existingNode.Value = new Memory<T>(items);
                 existingNode.Next = newNode;
             }
         }

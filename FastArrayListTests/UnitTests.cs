@@ -110,6 +110,7 @@ public class FastArrayListTests
         {
             -4
         };
+
         Assert.Equal(5, list.IndexOf(-4));
         Assert.Equal(4, list.IndexOf(3));
     }
@@ -121,6 +122,7 @@ public class FastArrayListTests
         var list = new FastArrayList<int>(arr);
 
         list.Insert(1, -4);
+
         Assert.Equal(1, list.IndexOf(-4));
         Assert.Equal(5, list.IndexOf(3));
     }
@@ -132,6 +134,7 @@ public class FastArrayListTests
         var list = new FastArrayList<int>(arr);
 
         list.Insert(0, -4);
+
         Assert.Equal(0, list.IndexOf(-4));
         Assert.Equal(1, list.IndexOf(2));
         Assert.Equal(5, list.IndexOf(3));
@@ -145,6 +148,7 @@ public class FastArrayListTests
 
         list.Insert(5, -7);
         list.Add(38);
+
         Assert.Equal(5, list.IndexOf(-7));
         Assert.Equal(2, list.IndexOf(1));
         Assert.Equal(0, list.IndexOf(2));
@@ -158,7 +162,20 @@ public class FastArrayListTests
         var list = new FastArrayList<int>(arr);
 
         list.Insert(4, -17);
+
         Assert.Equal(4, list.IndexOf(-17));
         Assert.Equal(5, list.IndexOf(3));
+    }
+
+    [Fact]
+    public void TestAddRange()
+    {
+        var arr = new int[] { 2, 4, 1, 5, 3 };
+        var list = new FastArrayList<int>(arr);
+
+        list.AddRange(new int[] { 60, 13, 203 });
+
+        Assert.Equal(5, list.IndexOf(60));
+        Assert.Equal(7, list.IndexOf(203));
     }
 }
