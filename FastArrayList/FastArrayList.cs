@@ -25,6 +25,7 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
             {
                 throw new IndexOutOfRangeException();
             }
+
             var currentNode = _head;
 
             if (index < currentNode.Value.Length)
