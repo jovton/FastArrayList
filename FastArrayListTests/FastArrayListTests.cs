@@ -178,4 +178,20 @@ public class FastArrayListTests
         Assert.Equal(5, list.IndexOf(60));
         Assert.Equal(7, list.IndexOf(203));
     }
+
+    [Fact]
+    public void BigArray()
+    {
+
+        var arr = new int[9999999];
+        for (var i=0; i<9999999;i++)
+        {
+            arr[i] = i+1;
+        }
+
+        var list = new FastArrayList<int>(arr);
+
+        Assert.Equal(9999999, list.Count);
+        Assert.Equal(9999998, list.IndexOf(9999999));
+    }
 }

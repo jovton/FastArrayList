@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Jovton;
+﻿namespace Jovton;
 
 public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnlyList<T>
 {
@@ -226,36 +221,26 @@ public sealed class FastArrayList<T> : IEnumerable<T>, IList<T>, IList, IReadOnl
 
         while (currentNode is not null)
         {
-            for (int i = 0; i < currentNode!.Value.Length; i += 5)
-            {
-                if (currentNode!.Value.Span[i]?.Equals(item) ?? false)
+            const byte checkCount = 100;
+
+            for (int i = 0; i < currentNode!.Value.Length; i += checkCount)
+            {                
+                for (var j = 0; j <= checkCount; j++)
                 {
-                    index += i;
-                    return index;
+                    if (i + j < currentNode.Value.Length && (currentNode!.Value.Span[i + j]?.Equals(item) ?? false))
+                    {
+                        index += j;
+                        return index;
+                    }
                 }
-                else if (i + 1 < currentNode.Value.Length && (currentNode!.Value.Span[i + 1]?.Equals(item) ?? false))
+
+                if (i + checkCount > currentNode!.Value.Length)
                 {
-                    index += i + 1;
-                    return index;
-                }
-                else if (i + 2 < currentNode.Value.Length && (currentNode!.Value.Span[i + 2]?.Equals(item) ?? false))
-                {
-                    index += i + 2;
-                    return index;
-                }
-                else if (i + 3 < currentNode.Value.Length && (currentNode!.Value.Span[i + 3]?.Equals(item) ?? false))
-                {
-                    index += i + 3;
-                    return index;
-                }
-                else if (i + 4 < currentNode.Value.Length && (currentNode!.Value.Span[i + 4]?.Equals(item) ?? false))
-                {
-                    index += i + 4;
-                    return index;
+                    index += currentNode!.Value.Length;
                 }
                 else
                 {
-                    index += currentNode!.Value.Length;
+                    index += checkCount;
                 }
             }
 
